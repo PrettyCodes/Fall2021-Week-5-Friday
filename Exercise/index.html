@@ -58,19 +58,19 @@
 
             console.table(data);
 
-            let line1 = d3.line()
+            let EstimatedCost = d3.line()
                 .x(d => xscale(d.Date))
                 .y(d => yscale(d.EstimatedCost));
 
-            let line2 = d3.line()
+            let RawMaterial = d3.line()
                 .x(d => xscale(d.Date))
                 .y(d => yscale(d.RawMaterial));
 
-            let line3 = d3.line()
+            let Workmanship = d3.line()
                 .x(d => xscale(d.Date))
                 .y(d => yscale(d.Workmanship));
 
-            let line4 = d3.line()
+            let YearlyStorage = d3.line()
                 .x(d => xscale(d.Date))
                 .y(d => yscale(d.YearlyStorage));
 
@@ -97,26 +97,36 @@
             svg.append("path")
                 .data([data])
                 .attr("class", "line")
-                .attr("d", line1)
+                .attr("d", EstimatedCost)
                 .attr("stroke", "green");
             // Adding a path line
             svg.append("path")
                 .data([data])
                 .attr("class", "line")
-                .attr("d", line2)
+                .attr("d", RawMaterial)
                 .attr("stroke", "blue");
             // Adding a path line
             svg.append("path")
                 .data([data])
                 .attr("class", "line")
-                .attr("d", line3)
+                .attr("d", Workmanship)
                 .attr("stroke", "black");
             // Adding a path line
             svg.append("path")
                 .data([data])
                 .attr("class", "line")
-                .attr("d", line4)
+                .attr("d", YearlyStorage)
                 .attr("stroke", "red");
+
+            // Legends
+            svg.append("circle").attr("cx", width - margin.right - 10).attr("cy", margin.top).attr("r", 6).style("fill", "green")
+            svg.append("text").attr("x", width - margin.right).attr("y", margin.top + 5).text("Estimated Cost").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", width - margin.right - 10).attr("cy", margin.top + 30).attr("r", 6).style("fill", "blue")
+            svg.append("text").attr("x", width - margin.right).attr("y", margin.top + 35).text("Raw Material").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", width - margin.right - 10).attr("cy", margin.top + 60).attr("r", 6).style("fill", "black")
+            svg.append("text").attr("x", width - margin.right).attr("y", margin.top + 65).text("Workmanship").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", width - margin.right - 10).attr("cy", margin.top + 90).attr("r", 6).style("fill", "red")
+            svg.append("text").attr("x", width - margin.right).attr("y", margin.top + 95).text("Yearly Storage").style("font-size", "15px").attr("alignment-baseline", "middle")
         })
     </script>
 </body>
