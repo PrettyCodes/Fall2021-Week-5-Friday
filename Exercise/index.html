@@ -1,15 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Horizontal Stacked Bar Chart</title>
+    <title>Horizontal Stacked Line Chart</title>
     <script src="../libs/d3/d3.min.js"></script>
-
+    <style>
+        svg {
+            background-color: rgb(236, 245, 245);
+            display: block;
+        }
+        
+        .line {
+            stroke-width: 2px;
+            fill: none;
+        }
+    </style>
 </head>
-<body>
-<div style="width: 80%"></div>
-<script>
 
-</script>
+<body>
+    <h2>Line Generator</h2>
+    <h4>By Pratishthit</h4>
+    <script>
+        d3.csv("data_sample.csv", d => {
+            return {
+                Date: new Date(d.date),
+                EstimatedCost: Number(d.EstimatedCost),
+                RawMaterial: Number(d.RawMaterial),
+                Workmanship: Number(d.Workmanship),
+                YearlyStorage: Number(d.YearlyStorage)
+            }
+        }).then(data => {
+
+            let svg = d3.select("body")
+                .append("svg")
+                .attr('width', '100%')
+                .attr('height', '100%')
+                .attr('viewBox', '0 0 1500 900')
+                .style('background-color', '#f5f3f3');
+
+            const margin = {
+                top: 20,
+                right: 10,
+                bottom: 50,
+                left: 50
+            };
+            const height = 600
+            const width = 1200
+
+            const xscale = d3.scaleTime()
+                .domain(d3.extent(data, d => d.Date))
+                .range([margin.left, width - margin.right])
+
+            const yscale = d3.scaleLinear()
+                .domain([0, 3000])
+                .range([height - margin.bottom, margin.top])
+
+            console.table(data);
+
+            let line1 = d3.line()
+                .x(d => xscale(d.Date))
+                .y(d => yscale(d.EstimatedCost));
+
+            let line2 = d3.line()
+                .x(d => xscale(d.Date))
+                .y(d => yscale(d.RawMaterial));
+
+            let line3 = d3.line()
+                .x(d => xscale(d.Date))
+                .y(d => yscale(d.Workmanship));
+
+            let line4 = d3.line()
+                .x(d => xscale(d.Date))
+                .y(d => yscale(d.YearlyStorage));
+
+            // To make a scatter plot
+            // svg.selectAll('marker')
+            //     .data(data)
+            //     .enter()
+            //     .append('circle')
+            //     .attr('cx', d => xscale(d.Date))
+            //     .attr('cy', d => yscale(d.EstimatedCost))
+            //     .attr('r', 4)
+
+            // Adding x axis
+            svg.append("g")
+                .attr("transform", `translate(0,${height-margin.bottom})`)
+                .call(d3.axisBottom().scale(xscale))
+
+            // Adding y axis
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft().scale(yscale))
+
+            // Adding a path line
+            svg.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", line1)
+                .attr("stroke", "green");
+            // Adding a path line
+            svg.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", line2)
+                .attr("stroke", "blue");
+            // Adding a path line
+            svg.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", line3)
+                .attr("stroke", "black");
+            // Adding a path line
+            svg.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", line4)
+                .attr("stroke", "red");
+        })
+    </script>
 </body>
+
 </html>
